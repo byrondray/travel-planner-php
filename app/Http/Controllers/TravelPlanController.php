@@ -2,63 +2,116 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\TravelPlan;
+use App\Models\Destination;
+use App\Models\Itinerary;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TravelPlanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $travelPlans = TravelPlan::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
+        return view('travel-plans.index', compact('travelPlans'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('travel-plans.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'budget' => 'nullable|numeric',
+            'currency' => 'nullable|string|size:3',
+            'preferences' => 'nullable|array',
+        ]);
+
+        $travelPlan = new TravelPlan();
+        $travelPlan->user_id = Auth::id();
+        $travelPlan->title = $validated['title'];
+        $travelPlan->description = $validated['description'] ?? null;
+        $travelPlan->start_date = $validated['start_date'];
+        $travelPlan->end_date = $validated['end_date'];
+        $travelPlan->budget = $validated['budget'] ?? null;
+        $travelPlan->currency = $validated['currency'] ?? 'USD';
+        $travelPlan->status = 'draft';
+        $travelPlan->preferences = $validated['preferences'] ? json_encode($validated['preferences']) : null;
+        $travelPlan->save();
+
+        return redirect()->route('travel-plans.show', $travelPlan->id)->with('success', 'Travel plan created successfully');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
-        //
+        $travelPlan = TravelPlan::with(['destinations', 'itineraries.activities'])->findOrFail($id);
+
+        if ($travelPlan->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('travel-plans.show', compact('travelPlan'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(string $id)
     {
-        //
+        $travelPlan = TravelPlan::findOrFail($id);
+
+        if ($travelPlan->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return view('travel-plans.edit', compact('travelPlan'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
-        //
+        $travelPlan = TravelPlan::findOrFail($id);
+
+        if ($travelPlan->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'budget' => 'nullable|numeric',
+            'currency' => 'nullable|string|size:3',
+            'status' => 'nullable|string|in:draft,planned,in_progress,completed,cancelled',
+            'preferences' => 'nullable|array',
+        ]);
+
+        $travelPlan->title = $validated['title'];
+        $travelPlan->description = $validated['description'] ?? $travelPlan->description;
+        $travelPlan->start_date = $validated['start_date'];
+        $travelPlan->end_date = $validated['end_date'];
+        $travelPlan->budget = $validated['budget'] ?? $travelPlan->budget;
+        $travelPlan->currency = $validated['currency'] ?? $travelPlan->currency;
+        $travelPlan->status = $validated['status'] ?? $travelPlan->status;
+        $travelPlan->preferences = $validated['preferences'] ? json_encode($validated['preferences']) : $travelPlan->preferences;
+        $travelPlan->save();
+
+        return redirect()->route('travel-plans.show', $travelPlan->id)->with('success', 'Travel plan updated successfully');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(string $id)
     {
-        //
+        $travelPlan = TravelPlan::findOrFail($id);
+
+        if ($travelPlan->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        $travelPlan->delete();
+
+        return redirect()->route('travel-plans.index')->with('success', 'Travel plan deleted successfully');
     }
 }
