@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TravelPlanController;
+use App\Http\Controllers\OpenAIController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,17 +17,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('dashboard');
 });
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [TravelPlanController::class, 'index'])->name('dashboard');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    Route::resource('travel-plans', TravelPlanController::class);
 
-Route::middleware('auth')->group(function () {
+    Route::post('/travel-plans/generate', [OpenAIController::class, 'generateTravelPlan'])->name('travel-plans.generate');
+    Route::post('/travel-plans/{travelPlan}/regenerate-section', [OpenAIController::class, 'regeneratePlanSection'])
+        ->name('travel-plans.regenerate-section');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

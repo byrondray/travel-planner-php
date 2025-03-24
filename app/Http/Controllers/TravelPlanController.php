@@ -12,8 +12,11 @@ class TravelPlanController extends Controller
 {
     public function index()
     {
-        $travelPlans = TravelPlan::where('user_id', Auth::id())->orderBy('created_at', 'desc')->get();
-        return view('travel-plans.index', compact('travelPlans'));
+        $travelPlans = TravelPlan::where('user_id', Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboard', compact('travelPlans'));
     }
 
     public function create()
