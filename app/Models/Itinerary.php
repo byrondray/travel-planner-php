@@ -27,4 +27,19 @@ class Itinerary extends Model
         'meals' => 'array',
         'date' => 'date',
     ];
+
+    public function travelPlan()
+    {
+        return $this->belongsTo(TravelPlan::class);
+    }
+
+    public function destination()
+    {
+        return $this->belongsTo(Destination::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(Activity::class);
+    }
 }

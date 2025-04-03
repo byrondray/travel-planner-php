@@ -24,14 +24,12 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <!-- Travel Plan Overview -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="md:col-span-2">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Overview</h3>
                             <p class="text-gray-600 mb-4">{{ $travelPlan->description }}</p>
-
                             <div class="grid grid-cols-2 gap-4 mb-4">
                                 <div>
                                     <span class="block text-sm font-medium text-gray-700">Dates</span>
@@ -76,12 +74,11 @@
                 </div>
             </div>
 
-            <!-- Itinerary -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Itinerary</h3>
 
-                    @forelse($travelPlan->itineraries->sortBy('date') as $itinerary)
+                    @forelse(optional($travelPlan->itineraries)->sortBy('date') ?? [] as $itinerary)
                                     <div class="mb-8 border-b pb-6">
                                         <div class="flex items-center mb-4">
                                             <div class="bg-indigo-100 text-indigo-800 py-1 px-3 rounded-full text-sm font-medium">
@@ -91,15 +88,13 @@
                                                 <div class="ml-2 text-gray-500">{{ $itinerary->destination->name }}</div>
                                             @endif
                                         </div>
-
                                         <h4 class="text-xl font-bold mb-2">{{ $itinerary->title }}</h4>
                                         <p class="text-gray-600 mb-4">{{ $itinerary->description }}</p>
 
-                                        <!-- Activities -->
                                         <div class="mb-4">
                                             <h5 class="font-medium text-gray-700 mb-2">Activities</h5>
                                             <div class="space-y-3">
-                                                @forelse($itinerary->activities->sortBy('start_time') as $activity)
+                                                @forelse(optional($itinerary->activities)->sortBy('start_time') ?? [] as $activity)
                                                     <div class="bg-white rounded-lg border p-3 shadow-sm">
                                                         <div class="flex justify-between">
                                                             <h6 class="font-medium">{{ $activity->title }}</h6>
@@ -124,7 +119,6 @@
                                             </div>
                                         </div>
 
-                                        <!-- Accommodations -->
                                         @if($itinerary->accommodations)
                                                             <div class="mb-4">
                                                                 <h5 class="font-medium text-gray-700 mb-2">Accommodation</h5>
@@ -150,7 +144,6 @@
                                                             </div>
                                         @endif
 
-                                        <!-- Meals -->
                                         @if($itinerary->meals)
                                                             <div>
                                                                 <h5 class="font-medium text-gray-700 mb-2">Meals</h5>
