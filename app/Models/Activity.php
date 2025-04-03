@@ -5,18 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Destination extends Model
+class Activity extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'travel_plan_id',
-        'name',
+        'itinerary_id',
+        'title',
         'description',
-        'country',
-        'city',
-        'arrival_date',
-        'departure_date',
+        'start_time',
+        'end_time',
+        'location',
+        'cost',
+        'type',
         'position'
     ];
 }

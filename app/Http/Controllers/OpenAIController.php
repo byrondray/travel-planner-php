@@ -63,10 +63,7 @@ class OpenAIController extends Controller
                 $validated['preferences'] ?? []
             );
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to generate travel plan: ' . $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Failed to generate travel plan: ' . $e->getMessage());
         }
     }
 
@@ -216,18 +213,11 @@ class OpenAIController extends Controller
 
             \DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Travel plan generated successfully',
-                'travel_plan_id' => $travelPlan->id
-            ], 200);
+            return redirect()->route('travel-plans.show', $travelPlan->id)
+                ->with('success', 'Travel plan generated successfully');
         } catch (\Exception $e) {
             \DB::rollback();
-
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to save travel plan: ' . $e->getMessage()
-            ], 500);
+            return redirect()->back()->with('error', 'Failed to save travel plan: ' . $e->getMessage());
         }
     }
 }

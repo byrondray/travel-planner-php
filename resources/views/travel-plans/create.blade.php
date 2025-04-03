@@ -13,41 +13,50 @@
                         @csrf
 
                         <div>
-                            <x-label for="title" value="Trip Title" />
-                            <x-input id="title" class="block mt-1 w-full" type="text" name="title" :value="old('title')"
-                                required autofocus />
+                            <label for="title" class="block font-medium text-sm text-gray-700">Trip Title</label>
+                            <input id="title"
+                                class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                type="text" name="title" value="{{ old('title') }}" required autofocus>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <x-label for="destination" value="Destination" />
-                                <x-input id="destination" class="block mt-1 w-full" type="text" name="destination"
-                                    :value="old('destination')" required placeholder="e.g. Paris, France" />
+                                <label for="destination"
+                                    class="block font-medium text-sm text-gray-700">Destination</label>
+                                <input id="destination"
+                                    class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                    type="text" name="destination" value="{{ old('destination') }}" required
+                                    placeholder="e.g. Paris, France">
                             </div>
 
                             <div>
-                                <x-label for="budget" value="Budget (USD)" />
-                                <x-input id="budget" class="block mt-1 w-full" type="number" name="budget"
-                                    :value="old('budget')" placeholder="e.g. 2000" />
+                                <label for="budget" class="block font-medium text-sm text-gray-700">Budget (USD)</label>
+                                <input id="budget"
+                                    class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                    type="number" name="budget" value="{{ old('budget') }}" placeholder="e.g. 2000">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
-                                <x-label for="start_date" value="Start Date" />
-                                <x-input id="start_date" class="block mt-1 w-full" type="date" name="start_date"
-                                    :value="old('start_date')" required />
+                                <label for="start_date" class="block font-medium text-sm text-gray-700">Start
+                                    Date</label>
+                                <input id="start_date"
+                                    class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                    type="date" name="start_date" value="{{ old('start_date') }}" required>
                             </div>
 
                             <div>
-                                <x-label for="end_date" value="End Date" />
-                                <x-input id="end_date" class="block mt-1 w-full" type="date" name="end_date"
-                                    :value="old('end_date')" required />
+                                <label for="end_date" class="block font-medium text-sm text-gray-700">End Date</label>
+                                <input id="end_date"
+                                    class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                    type="date" name="end_date" value="{{ old('end_date') }}" required>
                             </div>
                         </div>
 
                         <div>
-                            <x-label for="preferences" value="Travel Preferences" />
+                            <label for="preferences" class="block font-medium text-sm text-gray-700">Travel
+                                Preferences</label>
                             <div class="mt-1 space-y-2">
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
@@ -87,7 +96,7 @@
                         </div>
 
                         <div>
-                            <x-label value="Interests" />
+                            <label class="block font-medium text-sm text-gray-700">Interests</label>
                             <div class="mt-1 grid grid-cols-2 md:grid-cols-3 gap-2">
                                 <div class="flex items-start">
                                     <div class="flex items-center h-5">
@@ -155,16 +164,18 @@
                         </div>
 
                         <div>
-                            <x-label for="additional_notes" value="Additional Notes" />
+                            <label for="additional_notes" class="block font-medium text-sm text-gray-700">Additional
+                                Notes</label>
                             <textarea id="additional_notes" name="preferences[additional_notes]" rows="3"
                                 class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full border border-gray-300 rounded-md"
                                 placeholder="Any specific requests or information you'd like to include..."></textarea>
                         </div>
 
                         <div class="flex items-center justify-end mt-4">
-                            <x-button class="ml-4">
+                            <button type="submit"
+                                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150 ml-4">
                                 {{ __('Generate Travel Plan') }}
-                            </x-button>
+                            </button>
                         </div>
                     </form>
                 </div>

@@ -17,7 +17,7 @@
                         </a>
                     </div>
 
-                    @if(count($travelPlans ?? []) > 0)
+                    @if(isset($travelPlans) && count($travelPlans) > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             @foreach($travelPlans as $plan)
                                 <div class="bg-white rounded-lg border shadow-sm hover:shadow-md transition-shadow">
