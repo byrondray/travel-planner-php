@@ -36,7 +36,7 @@ class OpenAIController extends Controller
 
             Log::info('Validation passed', ['destination' => $validated['destination']]);
 
-            // Create travel plan record with processing status
+            // Create travel plan record with pending status
             $travelPlan = TravelPlan::create([
                 'user_id' => Auth::id(),
                 'title' => $validated['title'],
@@ -44,18 +44,17 @@ class OpenAIController extends Controller
                 'end_date' => $validated['end_date'],
                 'budget' => $validated['budget'],
                 'status' => 'draft',
-                'processing_status' => 'processing',
-                'processing_started_at' => now(),
+                'processing_status' => 'pending',
                 'preferences' => json_encode($validated['preferences'] ?? [])
             ]);
 
-            // Process immediately instead of using queue
-            $this->processOpenAIRequest($travelPlan, $validated);
+            // Store the request data in session for processing
+            session(['travel_plan_data_' . $travelPlan->id => $validated]);
 
-            Log::info('Travel plan generation completed', ['plan_id' => $travelPlan->id]);
+            Log::info('Travel plan created, redirecting to processing', ['plan_id' => $travelPlan->id]);
 
-            return redirect()->route('travel-plans.show', $travelPlan->id)
-                ->with('success', 'Your travel plan has been generated successfully!');
+            return redirect()->route('travel-plans.processing', $travelPlan->id)
+                ->with('success', 'Your travel plan is being generated! This may take up to 2 minutes.');
 
         } catch (\Exception $e) {
             Log::error('Exception in generateTravelPlan', [
@@ -69,9 +68,28 @@ class OpenAIController extends Controller
         }
     }
 
-    private function processOpenAIRequest(TravelPlan $travelPlan, array $requestData)
+    public function processOpenAI(Request $request, TravelPlan $travelPlan)
     {
         try {
+            // Security check
+            if ($travelPlan->user_id !== Auth::id()) {
+                abort(403, 'Unauthorized action.');
+            }
+
+            // Get the request data from session
+            $requestData = session('travel_plan_data_' . $travelPlan->id);
+            if (!$requestData) {
+                throw new \Exception('Travel plan data not found in session.');
+            }
+
+            // Update status to processing
+            $travelPlan->update([
+                'processing_status' => 'processing',
+                'processing_started_at' => now()
+            ]);
+
+            Log::info('Starting OpenAI processing for travel plan', ['plan_id' => $travelPlan->id]);
+
             $start = new \DateTime($requestData['start_date']);
             $end = new \DateTime($requestData['end_date']);
             $duration = $start->diff($end)->days;
@@ -110,7 +128,16 @@ class OpenAIController extends Controller
                 'processing_completed_at' => now()
             ]);
 
+            // Clear session data
+            session()->forget('travel_plan_data_' . $travelPlan->id);
+
             Log::info('Travel plan generation completed successfully', ['plan_id' => $travelPlan->id]);
+
+            return response()->json([
+                'success' => true,
+                'processing_status' => 'completed',
+                'redirect_url' => route('travel-plans.show', $travelPlan->id)
+            ]);
 
         } catch (\Exception $e) {
             Log::error('Travel plan generation failed', [
@@ -125,7 +152,11 @@ class OpenAIController extends Controller
                 'processing_completed_at' => now()
             ]);
 
-            throw $e;
+            return response()->json([
+                'success' => false,
+                'processing_status' => 'failed',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 

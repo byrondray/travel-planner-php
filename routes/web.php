@@ -28,6 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/travel-plans/generate', [OpenAIController::class, 'generateTravelPlan'])->name('travel-plans.generate');
     Route::get('/travel-plans/{travelPlan}/processing', [TravelPlanController::class, 'processing'])->name('travel-plans.processing');
     Route::get('/travel-plans/{travelPlan}/status', [TravelPlanController::class, 'status'])->name('travel-plans.status');
+    Route::post('/travel-plans/{travelPlan}/process', [OpenAIController::class, 'processOpenAI'])->name('travel-plans.process');
     Route::post('/travel-plans/{travelPlan}/regenerate-section', [OpenAIController::class, 'regeneratePlanSection'])
         ->name('travel-plans.regenerate-section');
 

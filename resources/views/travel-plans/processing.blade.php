@@ -219,7 +219,44 @@ setInterval(updateStatusMessage, 4000);
 // Show first step immediately
 showNextStep();
 
-// Check status
+// Start processing immediately when page loads
+function startProcessing() {
+    fetch(`{{ route('travel-plans.process', $travelPlan->id) }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success && data.processing_status === 'completed') {
+            // Show success state
+            document.getElementById('loading-section').classList.add('hidden');
+            document.getElementById('success-section').classList.remove('hidden');
+            document.getElementById('progress-bar').style.width = '100%';
+            document.getElementById('progress-percent').textContent = '100%';
+            
+            setTimeout(() => {
+                window.location.href = data.redirect_url;
+            }, 2000);
+        } else if (!data.success || data.processing_status === 'failed') {
+            document.getElementById('loading-section').classList.add('hidden');
+            document.getElementById('error-section').classList.remove('hidden');
+            document.getElementById('error-message').textContent = 
+                data.error || 'An unexpected error occurred while generating your travel plan.';
+        }
+    })
+    .catch(error => {
+        console.error('Error starting processing:', error);
+        document.getElementById('loading-section').classList.add('hidden');
+        document.getElementById('error-section').classList.remove('hidden');
+        document.getElementById('error-message').textContent = 
+            'An unexpected error occurred while generating your travel plan.';
+    });
+}
+
+// Check status (fallback for cases where processing is already started)
 function checkStatus() {
     fetch(`{{ route('travel-plans.status', $travelPlan->id) }}`)
         .then(response => response.json())
@@ -247,9 +284,14 @@ function checkStatus() {
         });
 }
 
-// Check status every 3 seconds
-const statusInterval = setInterval(checkStatus, 3000);
-checkStatus(); // Initial check
+// Start processing immediately if status is 'pending'
+@if($travelPlan->processing_status === 'pending')
+    startProcessing();
+@elseif($travelPlan->processing_status === 'processing')
+    // Check status every 3 seconds if already processing
+    const statusInterval = setInterval(checkStatus, 3000);
+    checkStatus(); // Initial check
+@endif
 
 // Clean up interval when page unloads
 window.addEventListener('beforeunload', () => {
