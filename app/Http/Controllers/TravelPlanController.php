@@ -117,4 +117,35 @@ class TravelPlanController extends Controller
 
         return redirect()->route('travel-plans.index')->with('success', 'Travel plan deleted successfully');
     }
+
+    public function processing(TravelPlan $travelPlan)
+    {
+        if ($travelPlan->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        // If already completed, redirect to show page
+        if ($travelPlan->processing_status === 'completed') {
+            return redirect()->route('travel-plans.show', $travelPlan->id);
+        }
+
+        return view('travel-plans.processing', compact('travelPlan'));
+    }
+
+    public function status(TravelPlan $travelPlan)
+    {
+        if ($travelPlan->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized action.');
+        }
+
+        return response()->json([
+            'processing_status' => $travelPlan->processing_status,
+            'processing_error' => $travelPlan->processing_error,
+            'processing_started_at' => $travelPlan->processing_started_at,
+            'processing_completed_at' => $travelPlan->processing_completed_at,
+            'redirect_url' => $travelPlan->processing_status === 'completed' 
+                ? route('travel-plans.show', $travelPlan->id) 
+                : null
+        ]);
+    }
 }

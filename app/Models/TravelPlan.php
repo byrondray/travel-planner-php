@@ -18,6 +18,10 @@ class TravelPlan extends Model
         'budget',
         'currency',
         'status',
+        'processing_status',
+        'processing_error',
+        'processing_started_at',
+        'processing_completed_at',
         'preferences',
         'ai_prompt_used',
         'ai_response'
@@ -28,6 +32,8 @@ class TravelPlan extends Model
         'ai_response' => 'array',
         'start_date' => 'date',
         'end_date' => 'date',
+        'processing_started_at' => 'datetime',
+        'processing_completed_at' => 'datetime',
     ];
 
     public function user()
