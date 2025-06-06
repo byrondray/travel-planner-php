@@ -1,183 +1,245 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-8">
-    <div class="max-w-2xl mx-auto">
-        <div class="bg-white rounded-lg shadow-lg p-8">
-            <!-- Header -->
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-900 mb-2">Generating Your Travel Plan</h1>
-                <p class="text-lg text-gray-600">{{ $travelPlan->title }}</p>
-            </div>
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+    <div class="container mx-auto px-4 py-16">
+        <div class="max-w-3xl mx-auto">
+            <!-- Main Card -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                <!-- Header Section -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-12 text-white">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h1 class="text-3xl font-bold mb-2">Creating Your Perfect Journey</h1>
+                        <p class="text-xl text-blue-100">{{ $travelPlan->title }}</p>
+                    </div>
+                </div>
 
-            <!-- Loading Animation -->
-            <div class="text-center mb-8" id="loading-section">
-                <div class="relative">
-                    <!-- Animated Globe -->
-                    <div class="inline-block animate-spin rounded-full h-20 w-20 border-4 border-blue-200 border-t-blue-600 mb-4"></div>
-                    
-                    <!-- Animated Progress Bar -->
-                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
-                        <div class="bg-blue-600 h-2 rounded-full animate-pulse" style="width: 0%" id="progress-bar"></div>
-                    </div>
-                    
-                    <!-- Status Messages -->
-                    <div class="space-y-2">
-                        <p class="text-gray-700 font-medium" id="status-message">
-                            Preparing your personalized travel experience...
-                        </p>
-                        <p class="text-sm text-gray-500" id="sub-message">
-                            This may take up to 2 minutes
-                        </p>
-                    </div>
-                </div>
-            </div>
+                <!-- Content Section -->
+                <div class="p-8 sm:p-12">
+                    <!-- Loading Section -->
+                    <div class="space-y-8" id="loading-section">
+                        <!-- Animated Icon -->
+                        <div class="flex justify-center">
+                            <div class="relative">
+                                <div class="w-24 h-24 rounded-full border-4 border-gray-200"></div>
+                                <div class="absolute top-0 left-0 w-24 h-24 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"></div>
+                                <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                    <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
+                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
 
-            <!-- Processing Steps -->
-            <div class="space-y-4 mb-8">
-                <div class="flex items-center space-x-3" id="step-1">
-                    <div class="flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                        <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
-                        </svg>
-                    </div>
-                    <span class="text-gray-700">Analyzing your preferences</span>
-                </div>
-                
-                <div class="flex items-center space-x-3" id="step-2">
-                    <div class="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                        <div class="w-3 h-3 bg-white rounded-full animate-pulse"></div>
-                    </div>
-                    <span class="text-gray-500">Researching destinations and activities</span>
-                </div>
-                
-                <div class="flex items-center space-x-3" id="step-3">
-                    <div class="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                        <div class="w-3 h-3 bg-white rounded-full"></div>
-                    </div>
-                    <span class="text-gray-500">Creating your personalized itinerary</span>
-                </div>
-                
-                <div class="flex items-center space-x-3" id="step-4">
-                    <div class="flex-shrink-0 w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                        <div class="w-3 h-3 bg-white rounded-full"></div>
-                    </div>
-                    <span class="text-gray-500">Finalizing recommendations</span>
-                </div>
-            </div>
+                        <!-- Progress Bar -->
+                        <div class="space-y-3">
+                            <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
+                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out" 
+                                     style="width: 0%" 
+                                     id="progress-bar">
+                                    <div class="h-full bg-white/30 animate-pulse"></div>
+                                </div>
+                            </div>
+                            <div class="flex justify-between text-sm text-gray-500">
+                                <span id="progress-percent">0%</span>
+                                <span id="time-estimate">Est. 2 minutes</span>
+                            </div>
+                        </div>
 
-            <!-- Error Section (hidden by default) -->
-            <div class="hidden bg-red-50 border border-red-200 rounded-lg p-4 mb-6" id="error-section">
-                <div class="flex items-center">
-                    <svg class="w-6 h-6 text-red-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
-                    <div>
-                        <h3 class="text-lg font-medium text-red-900">Generation Failed</h3>
-                        <p class="text-red-700 mt-1" id="error-message"></p>
+                        <!-- Status Messages -->
+                        <div class="text-center space-y-4">
+                            <p class="text-lg font-medium text-gray-800" id="status-message">
+                                ✨ Analyzing your travel preferences...
+                            </p>
+                            <div class="space-y-2 text-sm text-gray-600" id="status-details">
+                                <p class="transition-opacity duration-500 opacity-0" data-step="1">
+                                    🗺️ Researching destinations and attractions
+                                </p>
+                                <p class="transition-opacity duration-500 opacity-0" data-step="2">
+                                    🏨 Finding the best accommodations
+                                </p>
+                                <p class="transition-opacity duration-500 opacity-0" data-step="3">
+                                    🍴 Discovering local cuisine and restaurants
+                                </p>
+                                <p class="transition-opacity duration-500 opacity-0" data-step="4">
+                                    📅 Creating your personalized itinerary
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tips While Waiting -->
+                        <div class="mt-8 p-6 bg-blue-50 rounded-xl">
+                            <h3 class="text-sm font-semibold text-blue-900 mb-2">Did you know?</h3>
+                            <p class="text-sm text-blue-700" id="travel-tip">
+                                Our AI analyzes thousands of travel experiences to create the perfect itinerary tailored just for you!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Error Section -->
+                    <div class="hidden" id="error-section">
+                        <div class="bg-red-50 border-2 border-red-200 rounded-xl p-6">
+                            <div class="flex items-start space-x-3">
+                                <div class="flex-shrink-0">
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h3 class="text-lg font-semibold text-red-900">Unable to Generate Travel Plan</h3>
+                                    <p class="text-red-700 mt-1" id="error-message">An unexpected error occurred.</p>
+                                    <div class="mt-4 space-x-3">
+                                        <a href="{{ route('travel-plans.create') }}" 
+                                           class="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors">
+                                            Try Again
+                                        </a>
+                                        <a href="{{ route('dashboard') }}" 
+                                           class="inline-flex items-center px-4 py-2 bg-white text-red-600 text-sm font-medium rounded-lg border-2 border-red-600 hover:bg-red-50 transition-colors">
+                                            Back to Dashboard
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Success Section (hidden by default) -->
+                    <div class="hidden" id="success-section">
+                        <div class="text-center space-y-6">
+                            <div class="inline-flex items-center justify-center w-20 h-20 bg-green-100 rounded-full">
+                                <svg class="w-10 h-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="text-2xl font-bold text-gray-900">Your Travel Plan is Ready!</h3>
+                                <p class="text-gray-600 mt-2">Get ready for an amazing adventure</p>
+                            </div>
+                            <div class="inline-flex items-center space-x-1 text-sm text-gray-500">
+                                <svg class="w-4 h-4 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <span>Redirecting...</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="mt-4">
-                    <a href="{{ route('travel-plans.create') }}" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">
-                        Try Again
-                    </a>
-                </div>
-            </div>
 
-            <!-- Back Button -->
-            <div class="text-center">
-                <a href="{{ route('dashboard') }}" class="text-blue-600 hover:text-blue-800 transition-colors">
-                    ← Back to Dashboard
-                </a>
+                <!-- Footer -->
+                <div class="px-8 py-6 bg-gray-50 border-t border-gray-100">
+                    <div class="text-center">
+                        <a href="{{ route('dashboard') }}" 
+                           class="inline-flex items-center text-sm text-gray-600 hover:text-gray-900 transition-colors">
+                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                            </svg>
+                            Back to Dashboard
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
 <script>
-let currentStep = 1;
-let progress = 0;
-const maxSteps = 4;
-const statusMessages = [
-    "Analyzing your preferences...",
-    "Researching destinations and activities...",
-    "Creating your personalized itinerary...",
-    "Finalizing recommendations...",
-    "Almost ready!"
+// Travel tips to rotate
+const travelTips = [
+    "Our AI analyzes thousands of travel experiences to create the perfect itinerary tailored just for you!",
+    "We're checking real-time data for the best local experiences and hidden gems at your destination.",
+    "Your personalized travel plan will include restaurant recommendations based on your preferences.",
+    "We're optimizing your daily schedules to minimize travel time and maximize enjoyment!",
+    "Our system considers weather patterns and seasonal events for your travel dates."
 ];
 
+let currentTip = 0;
+let progress = 0;
+let stepProgress = 0;
+
+// Rotate tips
+function rotateTips() {
+    currentTip = (currentTip + 1) % travelTips.length;
+    const tipElement = document.getElementById('travel-tip');
+    tipElement.style.opacity = '0';
+    setTimeout(() => {
+        tipElement.textContent = travelTips[currentTip];
+        tipElement.style.opacity = '1';
+    }, 300);
+}
+
+// Show status steps progressively
+function showNextStep() {
+    stepProgress++;
+    if (stepProgress <= 4) {
+        const step = document.querySelector(`[data-step="${stepProgress}"]`);
+        if (step) {
+            step.classList.remove('opacity-0');
+            step.classList.add('opacity-100');
+        }
+    }
+}
+
+// Update progress bar
 function updateProgress() {
-    const progressBar = document.getElementById('progress-bar');
-    const statusMessage = document.getElementById('status-message');
-    
     if (progress < 90) {
-        progress += Math.random() * 15 + 5; // Random increment between 5-20
-        if (progress > 90) progress = 90;
-        
-        progressBar.style.width = progress + '%';
-        
-        const stepIndex = Math.floor(progress / 25);
-        if (stepIndex < statusMessages.length) {
-            statusMessage.textContent = statusMessages[stepIndex];
-            updateStepUI(stepIndex + 1);
-        }
+        progress += Math.random() * 15;
+        progress = Math.min(progress, 90);
+        document.getElementById('progress-bar').style.width = progress + '%';
+        document.getElementById('progress-percent').textContent = Math.round(progress) + '%';
     }
 }
 
-function updateStepUI(step) {
-    if (step > currentStep) {
-        // Mark previous step as complete
-        const prevStep = document.getElementById(`step-${currentStep}`);
-        const prevCircle = prevStep.querySelector('div');
-        const prevText = prevStep.querySelector('span');
-        
-        prevCircle.className = 'flex-shrink-0 w-8 h-8 bg-green-600 rounded-full flex items-center justify-center';
-        prevCircle.innerHTML = '<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
-        prevText.className = 'text-gray-700';
-        
-        // Update current step
-        if (step <= maxSteps) {
-            const currentStepEl = document.getElementById(`step-${step}`);
-            const currentCircle = currentStepEl.querySelector('div');
-            const currentText = currentStepEl.querySelector('span');
-            
-            currentCircle.className = 'flex-shrink-0 w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center';
-            currentCircle.innerHTML = '<div class="w-3 h-3 bg-white rounded-full animate-pulse"></div>';
-            currentText.className = 'text-gray-700 font-medium';
-            
-            currentStep = step;
-        }
-    }
+// Update status messages
+const statusMessages = [
+    "✨ Analyzing your travel preferences...",
+    "🌍 Exploring destination possibilities...",
+    "📍 Mapping out the perfect route...",
+    "🎯 Personalizing your experience...",
+    "🔄 Finalizing your itinerary..."
+];
+
+let currentStatus = 0;
+function updateStatusMessage() {
+    currentStatus = (currentStatus + 1) % statusMessages.length;
+    document.getElementById('status-message').textContent = statusMessages[currentStatus];
 }
 
+// Start animations
+setInterval(rotateTips, 5000);
+setInterval(showNextStep, 3000);
+setInterval(updateProgress, 2000);
+setInterval(updateStatusMessage, 4000);
+
+// Show first step immediately
+showNextStep();
+
+// Check status
 function checkStatus() {
     fetch(`{{ route('travel-plans.status', $travelPlan->id) }}`)
         .then(response => response.json())
         .then(data => {
             if (data.processing_status === 'completed') {
-                // Complete the progress bar
+                // Show success state
+                document.getElementById('loading-section').classList.add('hidden');
+                document.getElementById('success-section').classList.remove('hidden');
                 document.getElementById('progress-bar').style.width = '100%';
-                document.getElementById('status-message').textContent = 'Complete! Redirecting...';
-                
-                // Mark all steps as complete
-                for (let i = 1; i <= maxSteps; i++) {
-                    const step = document.getElementById(`step-${i}`);
-                    const circle = step.querySelector('div');
-                    const text = step.querySelector('span');
-                    
-                    circle.className = 'flex-shrink-0 w-8 h-8 bg-green-600 rounded-full flex items-center justify-center';
-                    circle.innerHTML = '<svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>';
-                    text.className = 'text-gray-700';
-                }
+                document.getElementById('progress-percent').textContent = '100%';
                 
                 setTimeout(() => {
                     window.location.href = data.redirect_url;
-                }, 1500);
+                }, 2000);
                 
             } else if (data.processing_status === 'failed') {
                 document.getElementById('loading-section').classList.add('hidden');
                 document.getElementById('error-section').classList.remove('hidden');
-                document.getElementById('error-message').textContent = data.processing_error || 'An unexpected error occurred.';
+                document.getElementById('error-message').textContent = 
+                    data.processing_error || 'An unexpected error occurred while generating your travel plan.';
             }
         })
         .catch(error => {
@@ -185,19 +247,30 @@ function checkStatus() {
         });
 }
 
-// Start progress animation
-const progressInterval = setInterval(updateProgress, 1000);
-
 // Check status every 3 seconds
 const statusInterval = setInterval(checkStatus, 3000);
+checkStatus(); // Initial check
 
-// Initial status check
-checkStatus();
-
-// Clean up intervals when page unloads
+// Clean up interval when page unloads
 window.addEventListener('beforeunload', () => {
-    clearInterval(progressInterval);
     clearInterval(statusInterval);
 });
+
+// Add smooth transitions
+document.getElementById('travel-tip').style.transition = 'opacity 0.3s ease-in-out';
 </script>
-@endsection 
+
+<style>
+    /* Add subtle animation to the progress bar */
+    @keyframes shimmer {
+        0% { background-position: -200px 0; }
+        100% { background-position: 200px 0; }
+    }
+    
+    #progress-bar > div {
+        background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        background-size: 200px 100%;
+        animation: shimmer 1.5s infinite;
+    }
+</style>
+@endsection

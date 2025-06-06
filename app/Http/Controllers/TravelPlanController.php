@@ -120,16 +120,27 @@ class TravelPlanController extends Controller
 
     public function processing(TravelPlan $travelPlan)
     {
-        if ($travelPlan->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        try {
+            if ($travelPlan->user_id !== Auth::id()) {
+                abort(403, 'Unauthorized action.');
+            }
 
-        // If already completed, redirect to show page
-        if ($travelPlan->processing_status === 'completed') {
-            return redirect()->route('travel-plans.show', $travelPlan->id);
-        }
+            // If already completed, redirect to show page
+            if ($travelPlan->processing_status === 'completed') {
+                return redirect()->route('travel-plans.show', $travelPlan->id);
+            }
 
-        return view('travel-plans.processing', compact('travelPlan'));
+            return view('travel-plans.processing', compact('travelPlan'));
+        } catch (\Exception $e) {
+            \Log::error('Processing page error: ' . $e->getMessage(), [
+                'travel_plan_id' => $travelPlan->id ?? 'unknown',
+                'user_id' => Auth::id(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            // Return a simple debug response
+            return response("Debug: " . $e->getMessage() . " | File: " . $e->getFile() . " | Line: " . $e->getLine(), 500);
+        }
     }
 
     public function status(TravelPlan $travelPlan)

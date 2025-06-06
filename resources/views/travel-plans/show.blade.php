@@ -5,10 +5,6 @@
                 {{ $travelPlan->title }}
             </h2>
             <div class="flex space-x-2">
-                <a href="{{ route('travel-plans.edit', $travelPlan->id) }}"
-                    class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
-                    Edit Plan
-                </a>
                 <form method="POST" action="{{ route('travel-plans.destroy', $travelPlan->id) }}" class="inline">
                     @csrf
                     @method('DELETE')
