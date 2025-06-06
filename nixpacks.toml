@@ -6,7 +6,4 @@ cmds = [
     'php artisan config:cache',
     'php artisan route:cache',
     'php artisan view:cache'
-]
-
-[phases.start]
-cmd = 'php artisan queue:restart && (php artisan queue:work --verbose --tries=3 --timeout=300 --memory=512 --sleep=3 --daemon >> /tmp/queue.log 2>&1 &) && php artisan serve --host=0.0.0.0 --port=$PORT' 
+] 
