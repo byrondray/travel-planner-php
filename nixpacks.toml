@@ -9,4 +9,4 @@ cmds = [
 ]
 
 [phases.start]
-cmd = 'php artisan queue:work --daemon & php artisan serve --host=0.0.0.0 --port=$PORT' 
+cmd = 'php artisan queue:restart && (php artisan queue:work --verbose --tries=3 --timeout=300 --memory=512 --sleep=3 --daemon >> /tmp/queue.log 2>&1 &) && php artisan serve --host=0.0.0.0 --port=$PORT' 
