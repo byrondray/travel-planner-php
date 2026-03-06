@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('My Travel Plans') }}
         </h2>
     </x-slot>
 
@@ -12,7 +12,7 @@
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium text-gray-900">Your Travel Plans</h3>
                         <a href="{{ route('travel-plans.create') }}"
-                            class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 transition-colors">
+                            class="inline-flex items-center px-4 py-2 bg-brand-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-700 transition-colors">
                             Create New Plan
                         </a>
                     </div>
@@ -59,7 +59,7 @@
                                                     {{ $plan->status === 'completed' ? '✅ Completed' : ucfirst(str_replace('_', ' ', $plan->status)) }}
                                                 </span>
                                                 <a href="{{ route('travel-plans.show', $plan->id) }}"
-                                                   class="text-indigo-600 hover:text-indigo-900 text-sm font-medium">
+                                                   class="text-brand-600 hover:text-brand-800 text-sm font-medium">
                                                     View Details →
                                                 </a>
                                             @endif
@@ -73,16 +73,16 @@
                             {{ $travelPlans->links() }}
                         </div>
                     @else
-                        <div class="bg-gray-50 rounded-lg p-8 text-center">
-                            <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
-                                <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        <div class="bg-gradient-to-br from-brand-50 to-purple-50 rounded-xl p-10 text-center">
+                            <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-sm mb-5">
+                                <svg class="w-10 h-10 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <h3 class="text-lg font-medium text-gray-900 mb-2">No Travel Plans Yet</h3>
-                            <p class="text-gray-600 mb-6">You haven't created any travel plans yet. Start planning your next adventure!</p>
+                            <h3 class="text-xl font-semibold text-gray-900 mb-2">Ready to explore the world?</h3>
+                            <p class="text-gray-600 mb-8 max-w-sm mx-auto">Create your first AI-powered travel plan and let us help you plan the perfect trip.</p>
                             <a href="{{ route('travel-plans.create') }}"
-                                class="inline-flex items-center px-6 py-3 bg-indigo-600 border border-transparent rounded-lg font-medium text-white hover:bg-indigo-700 transition-colors">
+                                class="inline-flex items-center px-6 py-3 brand-gradient border border-transparent rounded-lg font-semibold text-sm text-white hover:opacity-90 transition shadow-md shadow-brand-200">
                                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                                 </svg>

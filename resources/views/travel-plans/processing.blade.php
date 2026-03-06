@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-brand-50">
     <div class="container mx-auto px-4 py-16">
         <div class="max-w-3xl mx-auto">
             <!-- Main Card -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <!-- Header Section -->
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-12 text-white">
+                <div class="bg-gradient-to-r from-blue-600 to-brand-600 px-8 py-12 text-white">
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -40,7 +40,7 @@
                         <!-- Progress Bar -->
                         <div class="space-y-3">
                             <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                                <div class="bg-gradient-to-r from-blue-500 to-indigo-600 h-3 rounded-full transition-all duration-500 ease-out" 
+                                <div class="bg-gradient-to-r from-blue-500 to-brand-600 h-3 rounded-full transition-all duration-500 ease-out" 
                                      style="width: 0%" 
                                      id="progress-bar">
                                     <div class="h-full bg-white/30 animate-pulse"></div>

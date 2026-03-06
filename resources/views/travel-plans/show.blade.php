@@ -77,7 +77,7 @@
                     @forelse(optional($travelPlan->itineraries)->sortBy('date') ?? [] as $itinerary)
                                     <div class="mb-8 border-b pb-6">
                                         <div class="flex items-center mb-4">
-                                            <div class="bg-indigo-100 text-indigo-800 py-1 px-3 rounded-full text-sm font-medium">
+                                            <div class="bg-brand-100 text-brand-800 py-1 px-3 rounded-full text-sm font-medium">
                                                 {{ \Carbon\Carbon::parse($itinerary->date)->format('D, M d, Y') }}
                                             </div>
                                             @if($itinerary->destination)

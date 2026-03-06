@@ -41,7 +41,7 @@
                             <div>
                                 <label for="title" class="block font-medium text-sm text-gray-700">Trip Title</label>
                                 <input id="title"
-                                    class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                    class="rounded-md shadow-sm border-gray-300 focus:border-brand-300 focus:ring focus:ring-brand-200 focus:ring-opacity-50 block mt-1 w-full"
                                     type="text" name="title" value="{{ old('title') }}" required autofocus>
                             </div>
 
@@ -50,7 +50,7 @@
                                     <label for="destination"
                                         class="block font-medium text-sm text-gray-700">Destination</label>
                                     <input id="destination"
-                                        class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                        class="rounded-md shadow-sm border-gray-300 focus:border-brand-300 focus:ring focus:ring-brand-200 focus:ring-opacity-50 block mt-1 w-full"
                                         type="text" name="destination" value="{{ old('destination') }}" required
                                         placeholder="e.g. Paris, France">
                                 </div>
@@ -59,7 +59,7 @@
                                     <label for="budget" class="block font-medium text-sm text-gray-700">Budget
                                         (USD)</label>
                                     <input id="budget"
-                                        class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                        class="rounded-md shadow-sm border-gray-300 focus:border-brand-300 focus:ring focus:ring-brand-200 focus:ring-opacity-50 block mt-1 w-full"
                                         type="number" name="budget" value="{{ old('budget') }}" placeholder="e.g. 2000">
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                     <label for="start_date" class="block font-medium text-sm text-gray-700">Start
                                         Date</label>
                                     <input id="start_date"
-                                        class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                        class="rounded-md shadow-sm border-gray-300 focus:border-brand-300 focus:ring focus:ring-brand-200 focus:ring-opacity-50 block mt-1 w-full"
                                         type="date" name="start_date" value="{{ old('start_date') }}" required>
                                 </div>
 
@@ -77,7 +77,7 @@
                                     <label for="end_date" class="block font-medium text-sm text-gray-700">End
                                         Date</label>
                                     <input id="end_date"
-                                        class="rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 block mt-1 w-full"
+                                        class="rounded-md shadow-sm border-gray-300 focus:border-brand-300 focus:ring focus:ring-brand-200 focus:ring-opacity-50 block mt-1 w-full"
                                         type="date" name="end_date" value="{{ old('end_date') }}" required>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="accommodation_luxury" name="preferences[accommodation]"
                                                 value="luxury" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="accommodation_luxury" class="font-medium text-gray-700">Luxury
@@ -101,7 +101,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="accommodation_mid" name="preferences[accommodation]"
                                                 value="mid-range" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded"
                                                 checked>
                                         </div>
                                         <div class="ml-3 text-sm">
@@ -113,7 +113,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="accommodation_budget" name="preferences[accommodation]"
                                                 value="budget" type="radio"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="accommodation_budget" class="font-medium text-gray-700">Budget
@@ -130,7 +130,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="interest_history" name="preferences[interests][]" value="history"
                                                 type="checkbox"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="interest_history"
@@ -141,7 +141,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="interest_art" name="preferences[interests][]" value="art"
                                                 type="checkbox"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="interest_art" class="font-medium text-gray-700">Art</label>
@@ -151,7 +151,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="interest_food" name="preferences[interests][]" value="food"
                                                 type="checkbox"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="interest_food" class="font-medium text-gray-700">Food</label>
@@ -161,7 +161,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="interest_nature" name="preferences[interests][]" value="nature"
                                                 type="checkbox"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="interest_nature"
@@ -172,7 +172,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="interest_adventure" name="preferences[interests][]"
                                                 value="adventure" type="checkbox"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="interest_adventure"
@@ -183,7 +183,7 @@
                                         <div class="flex items-center h-5">
                                             <input id="interest_relaxation" name="preferences[interests][]"
                                                 value="relaxation" type="checkbox"
-                                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded">
+                                                class="focus:ring-brand-500 h-4 w-4 text-brand-600 border-gray-300 rounded">
                                         </div>
                                         <div class="ml-3 text-sm">
                                             <label for="interest_relaxation"
@@ -197,7 +197,7 @@
                                 <label for="additional_notes" class="block font-medium text-sm text-gray-700">Additional
                                     Notes</label>
                                 <textarea id="additional_notes" name="preferences[additional_notes]" rows="3"
-                                    class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full border border-gray-300 rounded-md"
+                                    class="shadow-sm focus:ring-brand-500 focus:border-brand-500 mt-1 block w-full border border-gray-300 rounded-md"
                                     placeholder="Any specific requests or information you'd like to include..."></textarea>
                             </div>
 
@@ -217,7 +217,7 @@
     <div id="loading-overlay"
         class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
         <div class="bg-white p-5 rounded-lg shadow-lg text-center">
-            <svg class="animate-spin mx-auto h-10 w-10 text-indigo-600 mb-3" xmlns="http://www.w3.org/2000/svg"
+            <svg class="animate-spin mx-auto h-10 w-10 text-brand-600 mb-3" xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor"
