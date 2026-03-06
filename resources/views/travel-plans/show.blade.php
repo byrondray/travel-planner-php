@@ -37,7 +37,7 @@
                                 <div>
                                     <span class="block text-sm font-medium text-gray-700">Status</span>
                                     <span
-                                        class="inline-flex px-2 py-1 rounded-full text-xs {{ $travelPlan->status === 'completed' ? 'bg-green-100 text-green-800' : ($travelPlan->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }}">
+                                        class="inline-flex px-2 py-1 rounded-full text-xs {{ $travelPlan->status === 'completed' ? 'bg-green-100 text-green-800' : ($travelPlan->status === 'in_progress' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-800') }}">
                                         {{ ucfirst(str_replace('_', ' ', $travelPlan->status)) }}
                                     </span>
                                 </div>

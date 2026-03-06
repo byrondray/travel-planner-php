@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-brand-50">
+<div class="min-h-screen bg-gradient-to-br from-brand-50 via-white to-brand-50">
     <div class="container mx-auto px-4 py-16">
         <div class="max-w-3xl mx-auto">
             <!-- Main Card -->
             <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
                 <!-- Header Section -->
-                <div class="bg-gradient-to-r from-blue-600 to-brand-600 px-8 py-12 text-white">
+                <div class="bg-gradient-to-r from-brand-600 to-brand-600 px-8 py-12 text-white">
                     <div class="text-center">
                         <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-6">
                             <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@
                             </svg>
                         </div>
                         <h1 class="text-3xl font-bold mb-2">Creating Your Perfect Journey</h1>
-                        <p class="text-xl text-blue-100">{{ $travelPlan->title }}</p>
+                        <p class="text-xl text-brand-100">{{ $travelPlan->title }}</p>
                     </div>
                 </div>
 
@@ -27,9 +27,9 @@
                         <div class="flex justify-center">
                             <div class="relative">
                                 <div class="w-24 h-24 rounded-full border-4 border-gray-200"></div>
-                                <div class="absolute top-0 left-0 w-24 h-24 rounded-full border-4 border-transparent border-t-blue-600 animate-spin"></div>
+                                <div class="absolute top-0 left-0 w-24 h-24 rounded-full border-4 border-transparent border-t-brand-600 animate-spin"></div>
                                 <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                                    <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                                    <svg class="w-10 h-10 text-brand-600" fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                                     </svg>
@@ -40,7 +40,7 @@
                         <!-- Progress Bar -->
                         <div class="space-y-3">
                             <div class="w-full bg-gray-100 rounded-full h-3 overflow-hidden">
-                                <div class="bg-gradient-to-r from-blue-500 to-brand-600 h-3 rounded-full transition-all duration-500 ease-out" 
+                                <div class="bg-gradient-to-r from-brand-500 to-brand-600 h-3 rounded-full transition-all duration-500 ease-out" 
                                      style="width: 0%" 
                                      id="progress-bar">
                                     <div class="h-full bg-white/30 animate-pulse"></div>
@@ -74,9 +74,9 @@
                         </div>
 
                         <!-- Tips While Waiting -->
-                        <div class="mt-8 p-6 bg-blue-50 rounded-xl">
-                            <h3 class="text-sm font-semibold text-blue-900 mb-2">Did you know?</h3>
-                            <p class="text-sm text-blue-700" id="travel-tip">
+                        <div class="mt-8 p-6 bg-brand-50 rounded-xl">
+                            <h3 class="text-sm font-semibold text-brand-900 mb-2">Did you know?</h3>
+                            <p class="text-sm text-brand-700" id="travel-tip">
                                 Our AI analyzes thousands of travel experiences to create the perfect itinerary tailored just for you!
                             </p>
                         </div>

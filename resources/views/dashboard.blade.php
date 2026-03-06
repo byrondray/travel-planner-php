@@ -27,7 +27,7 @@
                                                 <h4 class="font-bold text-xl">{{ $plan->title }}</h4>
                                                 @if(isset($plan->processing_status) && in_array($plan->processing_status, ['pending', 'processing']))
                                                     <div class="flex-shrink-0 ml-2">
-                                                        <div class="w-5 h-5 rounded-full border-2 border-transparent border-t-blue-600 animate-spin"></div>
+                                                        <div class="w-5 h-5 rounded-full border-2 border-transparent border-t-brand-600 animate-spin"></div>
                                                     </div>
                                                 @endif
                                             </div>
@@ -39,11 +39,11 @@
 
                                         <div class="flex justify-between items-center pt-4 border-t border-gray-100">
                                             @if(isset($plan->processing_status) && in_array($plan->processing_status, ['pending', 'processing']))
-                                                <span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-800 font-medium">
+                                                <span class="px-3 py-1 rounded-full text-xs bg-brand-100 text-brand-800 font-medium">
                                                     {{ $plan->processing_status === 'pending' ? '⏳ Queued' : '🔄 Generating...' }}
                                                 </span>
                                                 <a href="{{ route('travel-plans.processing', $plan->id) }}"
-                                                   class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                                   class="text-brand-600 hover:text-brand-800 text-sm font-medium">
                                                     View Progress →
                                                 </a>
                                             @elseif(isset($plan->processing_status) && $plan->processing_status === 'failed')
@@ -55,7 +55,7 @@
                                                     Try Again →
                                                 </a>
                                             @else
-                                                <span class="px-3 py-1 rounded-full text-xs {{ $plan->status === 'completed' ? 'bg-green-100 text-green-800' : ($plan->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }} font-medium">
+                                                <span class="px-3 py-1 rounded-full text-xs {{ $plan->status === 'completed' ? 'bg-green-100 text-green-800' : ($plan->status === 'in_progress' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-800') }} font-medium">
                                                     {{ $plan->status === 'completed' ? '✅ Completed' : ucfirst(str_replace('_', ' ', $plan->status)) }}
                                                 </span>
                                                 <a href="{{ route('travel-plans.show', $plan->id) }}"
