@@ -7,7 +7,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg animate-slide-up">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="flex justify-between items-center mb-6">
                         <h3 class="text-lg font-medium text-gray-900">Your Travel Plans</h3>
@@ -20,14 +20,14 @@
                     @if(isset($travelPlans) && count($travelPlans) > 0)
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             @foreach($travelPlans as $plan)
-                                <div class="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow">
+                                <div class="bg-white rounded-xl border shadow-sm hover:shadow-md transition-shadow hover-lift animate-slide-up animate-stagger delay-{{ ($loop->index % 6 + 1) * 100 }}">
                                     <div class="p-6 h-full flex flex-col">
                                         <div class="flex-1">
                                             <div class="flex items-start justify-between mb-2">
                                                 <h4 class="font-bold text-xl">{{ $plan->title }}</h4>
                                                 @if(isset($plan->processing_status) && in_array($plan->processing_status, ['pending', 'processing']))
                                                     <div class="flex-shrink-0 ml-2">
-                                                        <div class="w-5 h-5 rounded-full border-2 border-transparent border-t-brand-600 animate-spin"></div>
+                                                        <div class="w-5 h-5 rounded-full border-2 border-transparent border-t-blue-600 animate-spin"></div>
                                                     </div>
                                                 @endif
                                             </div>
@@ -39,11 +39,11 @@
 
                                         <div class="flex justify-between items-center pt-4 border-t border-gray-100">
                                             @if(isset($plan->processing_status) && in_array($plan->processing_status, ['pending', 'processing']))
-                                                <span class="px-3 py-1 rounded-full text-xs bg-brand-100 text-brand-800 font-medium">
+                                                <span class="px-3 py-1 rounded-full text-xs bg-blue-100 text-blue-800 font-medium">
                                                     {{ $plan->processing_status === 'pending' ? '⏳ Queued' : '🔄 Generating...' }}
                                                 </span>
                                                 <a href="{{ route('travel-plans.processing', $plan->id) }}"
-                                                   class="text-brand-600 hover:text-brand-800 text-sm font-medium">
+                                                   class="text-blue-600 hover:text-blue-800 text-sm font-medium">
                                                     View Progress →
                                                 </a>
                                             @elseif(isset($plan->processing_status) && $plan->processing_status === 'failed')
@@ -55,7 +55,7 @@
                                                     Try Again →
                                                 </a>
                                             @else
-                                                <span class="px-3 py-1 rounded-full text-xs {{ $plan->status === 'completed' ? 'bg-green-100 text-green-800' : ($plan->status === 'in_progress' ? 'bg-brand-100 text-brand-800' : 'bg-gray-100 text-gray-800') }} font-medium">
+                                                <span class="px-3 py-1 rounded-full text-xs {{ $plan->status === 'completed' ? 'bg-green-100 text-green-800' : ($plan->status === 'in_progress' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800') }} font-medium">
                                                     {{ $plan->status === 'completed' ? '✅ Completed' : ucfirst(str_replace('_', ' ', $plan->status)) }}
                                                 </span>
                                                 <a href="{{ route('travel-plans.show', $plan->id) }}"
@@ -73,7 +73,7 @@
                             {{ $travelPlans->links() }}
                         </div>
                     @else
-                        <div class="bg-gradient-to-br from-brand-50 to-purple-50 rounded-xl p-10 text-center">
+                        <div class="bg-gradient-to-br from-brand-50 to-purple-50 rounded-xl p-10 text-center animate-scale-in">
                             <div class="inline-flex items-center justify-center w-20 h-20 bg-white rounded-full shadow-sm mb-5">
                                 <svg class="w-10 h-10 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
