@@ -12,3 +12,39 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+/* Animation delay utilities */
+.delay-100 {
+    animation-delay: 100ms;
+}
+.delay-200 {
+    animation-delay: 200ms;
+}
+.delay-300 {
+    animation-delay: 300ms;
+}
+.delay-400 {
+    animation-delay: 400ms;
+}
+.delay-500 {
+    animation-delay: 500ms;
+}
+.delay-600 {
+    animation-delay: 600ms;
+}
+.delay-700 {
+    animation-delay: 700ms;
+}
+
+/* Elements with delayed animations start invisible */
+.animate-stagger {
+    opacity: 0;
+}
+
+/* Hover lift for interactive cards */
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.hover-lift:hover {
+    transform: translateY(-2px);
+}

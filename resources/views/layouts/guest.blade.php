@@ -18,7 +18,7 @@
     </head>
     <body class="font-sans text-gray-900 antialiased">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gradient-to-br from-brand-50 via-white to-purple-50">
-            <div class="text-center">
+            <div class="text-center animate-fade-in">
                 <a href="/" class="inline-flex flex-col items-center gap-2">
                     <x-application-logo class="w-16 h-16 text-brand-600" />
                     <span class="text-2xl font-bold brand-gradient-text">{{ config('app.name', 'Voyager') }}</span>
@@ -26,7 +26,7 @@
                 <p class="mt-2 text-sm text-gray-500">Plan your next adventure with AI</p>
             </div>
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-lg overflow-hidden sm:rounded-xl border border-gray-100">
+            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-lg overflow-hidden sm:rounded-xl border border-gray-100 animate-slide-up animate-stagger delay-200">
                 {{ $slot }}
             </div>
         </div>

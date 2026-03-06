@@ -20,7 +20,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mb-6 animate-slide-up">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div class="md:col-span-2">
@@ -50,7 +50,7 @@
                             </div>
                         </div>
 
-                        <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="bg-gray-50 p-4 rounded-lg animate-fade-in animate-stagger delay-300">
                             <h3 class="text-lg font-medium text-gray-900 mb-2">Destinations</h3>
                             <ul class="divide-y divide-gray-200">
                                 @forelse($travelPlan->destinations as $destination)
@@ -70,12 +70,12 @@
                 </div>
             </div>
 
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg animate-slide-up animate-stagger delay-200">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h3 class="text-lg font-medium text-gray-900 mb-4">Itinerary</h3>
 
                     @forelse(optional($travelPlan->itineraries)->sortBy('date') ?? [] as $itinerary)
-                                    <div class="mb-8 border-b pb-6">
+                                    <div class="mb-8 border-b pb-6 animate-slide-up animate-stagger" style="animation-delay: {{ $loop->index * 100 + 300 }}ms">
                                         <div class="flex items-center mb-4">
                                             <div class="bg-brand-100 text-brand-800 py-1 px-3 rounded-full text-sm font-medium">
                                                 {{ \Carbon\Carbon::parse($itinerary->date)->format('D, M d, Y') }}
@@ -91,7 +91,7 @@
                                             <h5 class="font-medium text-gray-700 mb-2">Activities</h5>
                                             <div class="space-y-3">
                                                 @forelse(optional($itinerary->activities)->sortBy('start_time') ?? [] as $activity)
-                                                    <div class="bg-white rounded-lg border p-3 shadow-sm">
+                                                    <div class="bg-white rounded-lg border p-3 shadow-sm hover-lift">
                                                         <div class="flex justify-between">
                                                             <h6 class="font-medium">{{ $activity->title }}</h6>
                                                             <span class="text-sm text-gray-600">
@@ -122,7 +122,7 @@
                                                                     $accommodation = json_decode($itinerary->accommodations);
                                                                 @endphp
                                                                 @if($accommodation)
-                                                                    <div class="bg-white rounded-lg border p-3 shadow-sm">
+                                                                    <div class="bg-white rounded-lg border p-3 shadow-sm hover-lift">
                                                                         <h6 class="font-medium">{{ $accommodation->name ?? 'Accommodation' }}</h6>
                                                                         <p class="text-sm text-gray-600 mt-1">{{ $accommodation->description ?? '' }}</p>
                                                                         @if(isset($accommodation->address))
@@ -149,7 +149,7 @@
                                                                 @if(is_array($meals) && count($meals) > 0)
                                                                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                                                                         @foreach($meals as $meal)
-                                                                            <div class="bg-white rounded-lg border p-3 shadow-sm">
+                                                                            <div class="bg-white rounded-lg border p-3 shadow-sm hover-lift">
                                                                                 <div class="flex justify-between">
                                                                                     <h6 class="font-medium">{{ ucfirst($meal->type ?? 'Meal') }}</h6>
                                                                                 </div>
