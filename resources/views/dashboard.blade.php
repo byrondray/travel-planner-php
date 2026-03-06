@@ -68,6 +68,10 @@
                                 </div>
                             @endforeach
                         </div>
+
+                        <div class="mt-6">
+                            {{ $travelPlans->links() }}
+                        </div>
                     @else
                         <div class="bg-gray-50 rounded-lg p-8 text-center">
                             <div class="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-4">
@@ -94,7 +98,7 @@
     <script>
         // Auto-refresh page every 15 seconds if there are processing plans
         @if(isset($travelPlans))
-            @php $hasProcessing = $travelPlans->where('processing_status', 'processing')->count() > 0; @endphp
+            @php $hasProcessing = $travelPlans->contains('processing_status', 'processing'); @endphp
             @if($hasProcessing)
                 setTimeout(() => {
                     window.location.reload();

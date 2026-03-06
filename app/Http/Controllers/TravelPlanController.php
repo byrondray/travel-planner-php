@@ -3,8 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\TravelPlan;
-use App\Models\Destination;
-use App\Models\Itinerary;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +12,7 @@ class TravelPlanController extends Controller
     {
         $travelPlans = TravelPlan::where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')
-            ->get();
+            ->paginate(12);
 
         return view('dashboard', compact('travelPlans'));
     }
@@ -36,50 +34,40 @@ class TravelPlanController extends Controller
             'preferences' => 'nullable|array',
         ]);
 
-        $travelPlan = new TravelPlan();
-        $travelPlan->user_id = Auth::id();
-        $travelPlan->title = $validated['title'];
-        $travelPlan->description = $validated['description'] ?? null;
-        $travelPlan->start_date = $validated['start_date'];
-        $travelPlan->end_date = $validated['end_date'];
-        $travelPlan->budget = $validated['budget'] ?? null;
-        $travelPlan->currency = $validated['currency'] ?? 'USD';
-        $travelPlan->status = 'draft';
-        $travelPlan->preferences = $validated['preferences'] ? json_encode($validated['preferences']) : null;
-        $travelPlan->save();
+        $travelPlan = TravelPlan::create([
+            'user_id' => Auth::id(),
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? null,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'budget' => $validated['budget'] ?? null,
+            'currency' => $validated['currency'] ?? 'USD',
+            'status' => 'draft',
+            'preferences' => $validated['preferences'] ?? null,
+        ]);
 
         return redirect()->route('travel-plans.show', $travelPlan->id)->with('success', 'Travel plan created successfully');
     }
 
-    public function show(string $id)
+    public function show(TravelPlan $travelPlan)
     {
-        $travelPlan = TravelPlan::with(['destinations', 'itineraries.activities'])->findOrFail($id);
+        $this->authorize('view', $travelPlan);
 
-        if ($travelPlan->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $travelPlan->load(['destinations', 'itineraries.activities']);
 
         return view('travel-plans.show', compact('travelPlan'));
     }
 
-    public function edit(string $id)
+    public function edit(TravelPlan $travelPlan)
     {
-        $travelPlan = TravelPlan::findOrFail($id);
-
-        if ($travelPlan->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $this->authorize('update', $travelPlan);
 
         return view('travel-plans.edit', compact('travelPlan'));
     }
 
-    public function update(Request $request, string $id)
+    public function update(Request $request, TravelPlan $travelPlan)
     {
-        $travelPlan = TravelPlan::findOrFail($id);
-
-        if ($travelPlan->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $this->authorize('update', $travelPlan);
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
@@ -92,26 +80,23 @@ class TravelPlanController extends Controller
             'preferences' => 'nullable|array',
         ]);
 
-        $travelPlan->title = $validated['title'];
-        $travelPlan->description = $validated['description'] ?? $travelPlan->description;
-        $travelPlan->start_date = $validated['start_date'];
-        $travelPlan->end_date = $validated['end_date'];
-        $travelPlan->budget = $validated['budget'] ?? $travelPlan->budget;
-        $travelPlan->currency = $validated['currency'] ?? $travelPlan->currency;
-        $travelPlan->status = $validated['status'] ?? $travelPlan->status;
-        $travelPlan->preferences = $validated['preferences'] ? json_encode($validated['preferences']) : $travelPlan->preferences;
-        $travelPlan->save();
+        $travelPlan->update([
+            'title' => $validated['title'],
+            'description' => $validated['description'] ?? $travelPlan->description,
+            'start_date' => $validated['start_date'],
+            'end_date' => $validated['end_date'],
+            'budget' => $validated['budget'] ?? $travelPlan->budget,
+            'currency' => $validated['currency'] ?? $travelPlan->currency,
+            'status' => $validated['status'] ?? $travelPlan->status,
+            'preferences' => $validated['preferences'] ?? $travelPlan->preferences,
+        ]);
 
         return redirect()->route('travel-plans.show', $travelPlan->id)->with('success', 'Travel plan updated successfully');
     }
 
-    public function destroy(string $id)
+    public function destroy(TravelPlan $travelPlan)
     {
-        $travelPlan = TravelPlan::findOrFail($id);
-
-        if ($travelPlan->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $this->authorize('delete', $travelPlan);
 
         $travelPlan->delete();
 
@@ -120,34 +105,18 @@ class TravelPlanController extends Controller
 
     public function processing(TravelPlan $travelPlan)
     {
-        try {
-            if ($travelPlan->user_id !== Auth::id()) {
-                abort(403, 'Unauthorized action.');
-            }
+        $this->authorize('view', $travelPlan);
 
-            // If already completed, redirect to show page
-            if ($travelPlan->processing_status === 'completed') {
-                return redirect()->route('travel-plans.show', $travelPlan->id);
-            }
-
-            return view('travel-plans.processing', compact('travelPlan'));
-        } catch (\Exception $e) {
-            \Log::error('Processing page error: ' . $e->getMessage(), [
-                'travel_plan_id' => $travelPlan->id ?? 'unknown',
-                'user_id' => Auth::id(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
-            // Return a simple debug response
-            return response("Debug: " . $e->getMessage() . " | File: " . $e->getFile() . " | Line: " . $e->getLine(), 500);
+        if ($travelPlan->processing_status === 'completed') {
+            return redirect()->route('travel-plans.show', $travelPlan->id);
         }
+
+        return view('travel-plans.processing', compact('travelPlan'));
     }
 
     public function status(TravelPlan $travelPlan)
     {
-        if ($travelPlan->user_id !== Auth::id()) {
-            abort(403, 'Unauthorized action.');
-        }
+        $this->authorize('view', $travelPlan);
 
         return response()->json([
             'processing_status' => $travelPlan->processing_status,
@@ -156,7 +125,7 @@ class TravelPlanController extends Controller
             'processing_completed_at' => $travelPlan->processing_completed_at,
             'redirect_url' => $travelPlan->processing_status === 'completed' 
                 ? route('travel-plans.show', $travelPlan->id) 
-                : null
+                : null,
         ]);
     }
 }
