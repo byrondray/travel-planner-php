@@ -23,13 +23,15 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [TravelPlanController::class, 'index'])->name('dashboard');
 
-    Route::resource('travel-plans', TravelPlanController::class)->except(['edit', 'update']);
+    Route::resource('travel-plans', TravelPlanController::class)->except(['edit', 'update', 'store']);
 
     Route::post('/travel-plans/generate', [OpenAIController::class, 'generateTravelPlan'])
         ->middleware('throttle:5,1')
         ->name('travel-plans.generate');
     Route::get('/travel-plans/{travelPlan}/processing', [TravelPlanController::class, 'processing'])->name('travel-plans.processing');
-    Route::get('/travel-plans/{travelPlan}/status', [TravelPlanController::class, 'status'])->name('travel-plans.status');
+    Route::get('/travel-plans/{travelPlan}/status', [TravelPlanController::class, 'status'])
+        ->middleware('throttle:60,1')
+        ->name('travel-plans.status');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

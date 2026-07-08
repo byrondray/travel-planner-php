@@ -12,7 +12,62 @@ use OpenAI;
 
 class TravelPlanGeneratorService
 {
-    protected $client;
+    private const RESPONSE_SCHEMA = <<<'JSON'
+    {
+        "description": "Overall description of the trip",
+        "destinations": [
+            {
+                "name": "City/Location name",
+                "country": "Country",
+                "description": "Brief description",
+                "arrival_date": "YYYY-MM-DD",
+                "departure_date": "YYYY-MM-DD"
+            }
+        ],
+        "itineraries": [
+            {
+                "day": 1,
+                "date": "YYYY-MM-DD",
+                "title": "Day 1: Title",
+                "description": "Overview of the day",
+                "destination": "City/Location name",
+                "activities": [
+                    {
+                        "title": "Activity name",
+                        "description": "Activity description",
+                        "start_time": "HH:MM",
+                        "end_time": "HH:MM",
+                        "location": "Location name",
+                        "type": "sightseeing|food|transportation|accommodation|entertainment|shopping|other",
+                        "cost": 0.00
+                    }
+                ],
+                "transportation": {
+                    "method": "Method of transport",
+                    "details": "Details about the transport",
+                    "cost": 0.00
+                },
+                "accommodation": {
+                    "name": "Accommodation name",
+                    "description": "Description",
+                    "address": "Address",
+                    "cost": 0.00
+                },
+                "meals": [
+                    {
+                        "type": "breakfast|lunch|dinner",
+                        "venue": "Restaurant name",
+                        "description": "Description",
+                        "cost": 0.00
+                    }
+                ]
+            }
+        ],
+        "total_estimated_cost": 0.00
+    }
+    JSON;
+
+    protected \OpenAI\Client $client;
 
     public function __construct()
     {
@@ -34,6 +89,7 @@ class TravelPlanGeneratorService
             $requestData['destination'],
             $duration,
             $requestData['budget'] ?? null,
+            $requestData['currency'] ?? 'USD',
             $requestData['preferences'] ?? []
         );
 
@@ -48,25 +104,34 @@ class TravelPlanGeneratorService
             'response_format' => ['type' => 'json_object'],
         ]);
 
-        $aiResponse = json_decode($response->choices[0]->message->content, true);
+        $rawContent = $response->choices[0]->message->content;
+        $aiResponse = json_decode($rawContent, true);
 
         if (!is_array($aiResponse)) {
+            Log::error('Failed to decode OpenAI response as JSON', [
+                'plan_id' => $travelPlan->id,
+                'json_error' => json_last_error_msg(),
+                'raw_response' => $rawContent,
+            ]);
+
             throw new \Exception('Invalid response format from OpenAI. Expected JSON object.');
         }
 
         Log::info('OpenAI response received, saving to database', ['plan_id' => $travelPlan->id]);
 
-        $this->saveToDatabase($travelPlan, $aiResponse, $prompt);
+        DB::transaction(function () use ($travelPlan, $aiResponse, $prompt) {
+            $this->saveToDatabase($travelPlan, $aiResponse, $prompt);
 
-        $travelPlan->update([
-            'processing_status' => 'completed',
-            'processing_completed_at' => now(),
-        ]);
+            $travelPlan->update([
+                'processing_status' => 'completed',
+                'processing_completed_at' => now(),
+            ]);
+        });
     }
 
-    public function buildPrompt(string $destination, int $duration, ?float $budget = null, array $preferences = []): string
+    public function buildPrompt(string $destination, int $duration, ?float $budget = null, string $currency = 'USD', array $preferences = []): string
     {
-        $budgetText = $budget ? "with a budget of approximately $budget USD" : "with no specific budget constraints";
+        $budgetText = $budget ? "with a budget of approximately {$budget} {$currency}" : "with no specific budget constraints";
         $preferencesText = '';
 
         if (!empty($preferences)) {
@@ -83,58 +148,7 @@ class TravelPlanGeneratorService
 
         return "Create a detailed {$duration}-day travel plan for {$destination} {$budgetText}. {$preferencesText}\n\n" .
             "Return your response as a JSON object with the following structure:\n" .
-            "{\n" .
-            "    \"description\": \"Overall description of the trip\",\n" .
-            "    \"destinations\": [\n" .
-            "        {\n" .
-            "            \"name\": \"City/Location name\",\n" .
-            "            \"country\": \"Country\",\n" .
-            "            \"description\": \"Brief description\",\n" .
-            "            \"arrival_date\": \"YYYY-MM-DD\",\n" .
-            "            \"departure_date\": \"YYYY-MM-DD\"\n" .
-            "        }\n" .
-            "    ],\n" .
-            "    \"itineraries\": [\n" .
-            "        {\n" .
-            "            \"day\": 1,\n" .
-            "            \"date\": \"YYYY-MM-DD\",\n" .
-            "            \"title\": \"Day 1: Title\",\n" .
-            "            \"description\": \"Overview of the day\",\n" .
-            "            \"destination\": \"City/Location name\",\n" .
-            "            \"activities\": [\n" .
-            "                {\n" .
-            "                    \"title\": \"Activity name\",\n" .
-            "                    \"description\": \"Activity description\",\n" .
-            "                    \"start_time\": \"HH:MM\",\n" .
-            "                    \"end_time\": \"HH:MM\",\n" .
-            "                    \"location\": \"Location name\",\n" .
-            "                    \"type\": \"sightseeing|food|transportation|accommodation|entertainment|shopping|other\",\n" .
-            "                    \"cost\": 0.00\n" .
-            "                }\n" .
-            "            ],\n" .
-            "            \"transportation\": {\n" .
-            "                \"method\": \"Method of transport\",\n" .
-            "                \"details\": \"Details about the transport\",\n" .
-            "                \"cost\": 0.00\n" .
-            "            },\n" .
-            "            \"accommodation\": {\n" .
-            "                \"name\": \"Accommodation name\",\n" .
-            "                \"description\": \"Description\",\n" .
-            "                \"address\": \"Address\",\n" .
-            "                \"cost\": 0.00\n" .
-            "            },\n" .
-            "            \"meals\": [\n" .
-            "                {\n" .
-            "                    \"type\": \"breakfast|lunch|dinner\",\n" .
-            "                    \"venue\": \"Restaurant name\",\n" .
-            "                    \"description\": \"Description\",\n" .
-            "                    \"cost\": 0.00\n" .
-            "                }\n" .
-            "            ]\n" .
-            "        }\n" .
-            "    ],\n" .
-            "    \"total_estimated_cost\": 0.00\n" .
-            "}";
+            self::RESPONSE_SCHEMA;
     }
 
     public function saveToDatabase(TravelPlan $travelPlan, array $aiResponse, string $prompt): void
@@ -168,17 +182,15 @@ class TravelPlanGeneratorService
             }
 
             if (isset($aiResponse['itineraries']) && is_array($aiResponse['itineraries'])) {
+                $destinationIdsByName = $travelPlan->destinations()->pluck('id', 'name');
+
                 foreach ($aiResponse['itineraries'] as $position => $itinData) {
-                    $destination = null;
-                    if (isset($itinData['destination'])) {
-                        $destination = Destination::where('travel_plan_id', $travelPlan->id)
-                            ->where('name', $itinData['destination'])
-                            ->first();
-                    }
+                    $destinationName = $itinData['destination'] ?? null;
+                    $destinationId = $destinationName ? ($destinationIdsByName[$destinationName] ?? null) : null;
 
                     $itinerary = Itinerary::create([
                         'travel_plan_id' => $travelPlan->id,
-                        'destination_id' => $destination?->id,
+                        'destination_id' => $destinationId,
                         'title' => $itinData['title'] ?? 'Day ' . ($position + 1),
                         'date' => $itinData['date'] ?? date('Y-m-d', strtotime($travelPlan->start_date . ' + ' . $position . ' days')),
                         'description' => $itinData['description'] ?? null,
