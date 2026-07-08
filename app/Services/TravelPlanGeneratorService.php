@@ -28,7 +28,7 @@ class TravelPlanGeneratorService
 
         $start = new \DateTime($requestData['start_date']);
         $end = new \DateTime($requestData['end_date']);
-        $duration = $start->diff($end)->days;
+        $duration = $start->diff($end)->days + 1;
 
         $prompt = $this->buildPrompt(
             $requestData['destination'],
@@ -40,7 +40,7 @@ class TravelPlanGeneratorService
         Log::info('Calling OpenAI API for travel plan', ['plan_id' => $travelPlan->id]);
 
         $response = $this->client->chat()->create([
-            'model' => 'gpt-4-turbo',
+            'model' => config('services.openai.model'),
             'messages' => [
                 ['role' => 'system', 'content' => 'You are a travel planning assistant. Create detailed travel itineraries with activities, accommodations, transportation, and meal recommendations.'],
                 ['role' => 'user', 'content' => $prompt],
@@ -150,6 +150,10 @@ class TravelPlanGeneratorService
 
             if (isset($aiResponse['destinations']) && is_array($aiResponse['destinations'])) {
                 foreach ($aiResponse['destinations'] as $position => $destData) {
+                    if (empty($destData['name'])) {
+                        continue;
+                    }
+
                     Destination::create([
                         'travel_plan_id' => $travelPlan->id,
                         'name' => $destData['name'],
@@ -186,6 +190,10 @@ class TravelPlanGeneratorService
 
                     if (isset($itinData['activities']) && is_array($itinData['activities'])) {
                         foreach ($itinData['activities'] as $actPosition => $actData) {
+                            if (empty($actData['title'])) {
+                                continue;
+                            }
+
                             Activity::create([
                                 'itinerary_id' => $itinerary->id,
                                 'title' => $actData['title'],

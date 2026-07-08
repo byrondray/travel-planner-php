@@ -29,7 +29,6 @@ class TravelPlan extends Model
 
     protected $casts = [
         'preferences' => 'array',
-        'ai_prompt_used' => 'array',
         'ai_response' => 'array',
         'start_date' => 'date',
         'end_date' => 'date',

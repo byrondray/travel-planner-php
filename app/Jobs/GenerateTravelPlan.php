@@ -29,26 +29,24 @@ class GenerateTravelPlan implements ShouldQueue
 
     public function handle(TravelPlanGeneratorService $service): void
     {
-        try {
-            Log::info('Starting travel plan generation job', ['plan_id' => $this->travelPlan->id]);
+        Log::info('Starting travel plan generation job', ['plan_id' => $this->travelPlan->id]);
 
-            $service->generate($this->travelPlan, $this->requestData);
+        $service->generate($this->travelPlan, $this->requestData);
 
-            Log::info('Travel plan generation completed successfully', ['plan_id' => $this->travelPlan->id]);
+        Log::info('Travel plan generation completed successfully', ['plan_id' => $this->travelPlan->id]);
+    }
 
-        } catch (\Exception $e) {
-            Log::error('Travel plan generation failed', [
-                'plan_id' => $this->travelPlan->id,
-                'error' => $e->getMessage(),
-            ]);
+    public function failed(\Throwable $e): void
+    {
+        Log::error('Travel plan generation failed', [
+            'plan_id' => $this->travelPlan->id,
+            'error' => $e->getMessage(),
+        ]);
 
-            $this->travelPlan->update([
-                'processing_status' => 'failed',
-                'processing_error' => $e->getMessage(),
-                'processing_completed_at' => now(),
-            ]);
-
-            throw $e;
-        }
+        $this->travelPlan->update([
+            'processing_status' => 'failed',
+            'processing_error' => $e->getMessage(),
+            'processing_completed_at' => now(),
+        ]);
     }
 }

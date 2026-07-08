@@ -19,6 +19,7 @@ class GenerateTravelPlanRequest extends FormRequest
             'start_date' => 'required|date',
             'end_date' => 'required|date|after:start_date',
             'budget' => 'nullable|numeric|min:0',
+            'currency' => 'nullable|string|size:3',
             'preferences' => 'nullable|array',
         ];
     }

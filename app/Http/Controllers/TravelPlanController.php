@@ -58,42 +58,6 @@ class TravelPlanController extends Controller
         return view('travel-plans.show', compact('travelPlan'));
     }
 
-    public function edit(TravelPlan $travelPlan)
-    {
-        $this->authorize('update', $travelPlan);
-
-        return view('travel-plans.edit', compact('travelPlan'));
-    }
-
-    public function update(Request $request, TravelPlan $travelPlan)
-    {
-        $this->authorize('update', $travelPlan);
-
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after:start_date',
-            'budget' => 'nullable|numeric',
-            'currency' => 'nullable|string|size:3',
-            'status' => 'nullable|string|in:draft,planned,in_progress,completed,cancelled',
-            'preferences' => 'nullable|array',
-        ]);
-
-        $travelPlan->update([
-            'title' => $validated['title'],
-            'description' => $validated['description'] ?? $travelPlan->description,
-            'start_date' => $validated['start_date'],
-            'end_date' => $validated['end_date'],
-            'budget' => $validated['budget'] ?? $travelPlan->budget,
-            'currency' => $validated['currency'] ?? $travelPlan->currency,
-            'status' => $validated['status'] ?? $travelPlan->status,
-            'preferences' => $validated['preferences'] ?? $travelPlan->preferences,
-        ]);
-
-        return redirect()->route('travel-plans.show', $travelPlan->id)->with('success', 'Travel plan updated successfully');
-    }
-
     public function destroy(TravelPlan $travelPlan)
     {
         $this->authorize('delete', $travelPlan);

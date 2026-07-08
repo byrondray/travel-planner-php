@@ -220,7 +220,19 @@ setInterval(updateStatusMessage, 4000);
 showNextStep();
 
 // Check status by polling (job is dispatched on the backend)
+const MAX_POLL_ATTEMPTS = 60; // 60 * 3s = 3 minutes
+let pollAttempts = 0;
+
+function showTimeoutError() {
+    document.getElementById('loading-section').classList.add('hidden');
+    document.getElementById('error-section').classList.remove('hidden');
+    document.getElementById('error-message').textContent =
+        'This is taking longer than expected. Please check back later or try again.';
+}
+
 function checkStatus() {
+    pollAttempts++;
+
     fetch(`{{ route('travel-plans.status', $travelPlan->id) }}`)
         .then(response => response.json())
         .then(data => {
@@ -242,10 +254,18 @@ function checkStatus() {
                     data.processing_error || 'An unexpected error occurred while generating your travel plan.';
 
                 clearInterval(statusInterval);
+            } else if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+                showTimeoutError();
+                clearInterval(statusInterval);
             }
         })
         .catch(error => {
             console.error('Error checking status:', error);
+
+            if (pollAttempts >= MAX_POLL_ATTEMPTS) {
+                showTimeoutError();
+                clearInterval(statusInterval);
+            }
         });
 }
 

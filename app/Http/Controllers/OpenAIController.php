@@ -22,6 +22,7 @@ class OpenAIController extends Controller
             'start_date' => $validated['start_date'],
             'end_date' => $validated['end_date'],
             'budget' => $validated['budget'],
+            'currency' => $validated['currency'] ?? 'USD',
             'status' => 'draft',
             'processing_status' => 'pending',
             'preferences' => $validated['preferences'] ?? [],
